@@ -34,6 +34,7 @@ func GetDetailHandler(id uint) *utils.Message {
 		Data: topic,
 	}
 }
+
 func GetListHandler(userID uint) *utils.Message {
 	topics, err := topic.GetListService(userID)
 	if err != nil {
@@ -46,5 +47,20 @@ func GetListHandler(userID uint) *utils.Message {
 		Code: 0,
 		Msg:  "OK",
 		Data: topics,
+	}
+}
+
+func DeleteHandler(userID, id uint) *utils.Message {
+	err := topic.DeleteService(userID, id)
+	if err != nil {
+		return &utils.Message{
+			Code: -1,
+			Msg:  err.Error(),
+		}
+	}
+	return &utils.Message{
+		Code: 0,
+		Msg:  "OK",
+		Data: nil,
 	}
 }

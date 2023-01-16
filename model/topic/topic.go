@@ -4,6 +4,7 @@ import (
 	"community-demo/model"
 	"community-demo/model/user"
 	"community-demo/utils"
+	"errors"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -63,4 +64,17 @@ func (*DAO) GetByUserId(userID uint) ([]Topic, error) {
 		return topics, err
 	}
 	return topics, nil
+}
+
+func (*DAO) DeleteById(userID, id uint) error {
+	var topic Topic
+	err := model.DB.Where("user_id = ? and id = ?", userID, id).Delete(&topic).Error
+	if err == gorm.ErrRecordNotFound {
+		return errors.New("不存在此帖子，或者没有权限删除")
+	}
+	if err != nil {
+		utils.Logger.Printf("[Topic]delete error: %s\n", err.Error())
+		return err
+	}
+	return nil
 }

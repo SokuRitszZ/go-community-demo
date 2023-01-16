@@ -40,6 +40,11 @@ func InitTopicGroup(group *gin.RouterGroup) error {
 		id, _ := strconv.ParseUint(c.Param("userID"), 10, 64)
 		c.JSON(200, topic2.GetListHandler(uint(id)))
 	})
+	group.DELETE("/delete", func(c *gin.Context) {
+		id, _ := strconv.ParseUint(c.Query("id"), 10, 64)
+		userID := c.GetUint("id")
+		c.JSON(200, topic2.DeleteHandler(userID, uint(id)))
+	})
 
 	return nil
 }
