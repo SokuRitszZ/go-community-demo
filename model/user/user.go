@@ -40,8 +40,8 @@ func (*DAO) Register(user *User) error {
 // GetInfoById R
 func (*DAO) GetInfoById(id int64) (*User, error) {
 	var user User
-	err := model.DB.Where("id = ?", id).Find(&user).Error
-	if err == gorm.ErrRecordNotFound {
+	err := model.DB.Where("id = ?", id).First(&user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
 	if err != nil {
@@ -53,8 +53,8 @@ func (*DAO) GetInfoById(id int64) (*User, error) {
 
 func (*DAO) FindByName(name string) (*User, error) {
 	var user User
-	err := model.DB.Where("name = ?", name).Find(&user).Error
-	if err == gorm.ErrRecordNotFound {
+	err := model.DB.Where("name = ?", name).First(&user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
 	if err != nil {
@@ -69,8 +69,8 @@ func (*DAO) FindByName(name string) (*User, error) {
 
 func (*DAO) CheckMatch(name, password string) (*User, error) {
 	var user User
-	err := model.DB.Where("name = ? and password = ?", name, password).Find(&user).Error
-	if err == gorm.ErrRecordNotFound || user.ID == 0 {
+	err := model.DB.Where("name = ? and password = ?", name, password).First(&user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
 	if err != nil {
@@ -82,8 +82,8 @@ func (*DAO) CheckMatch(name, password string) (*User, error) {
 
 func (*DAO) GetBaseData(id uint) (*User, error) {
 	var user User
-	err := model.DB.Where("id = ?", id).Find(&user).Error
-	if err == gorm.ErrRecordNotFound || user.ID == 0 {
+	err := model.DB.Where("id = ?", id).First(&user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errors.New("找不到这个用户")
 	}
 	if err != nil {
@@ -95,8 +95,8 @@ func (*DAO) GetBaseData(id uint) (*User, error) {
 
 func (*DAO) FindIfExist(id uint) bool {
 	var user User
-	err := model.DB.Where("id = ?", id).Find(&user).Error
-	if err == gorm.ErrRecordNotFound || user.ID == 0 {
+	err := model.DB.Where("id = ?", id).First(&user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false
 	}
 	if err != nil {

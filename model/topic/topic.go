@@ -42,8 +42,8 @@ func (*DAO) Publish(topic *Topic) error {
 // GetById R
 func (*DAO) GetById(id uint) (*Topic, error) {
 	var topic Topic
-	err := model.DB.Where("id = ?", id).Find(&topic).Error
-	if err == gorm.ErrRecordNotFound || topic.ID == 0 {
+	err := model.DB.Where("id = ?", id).First(&topic).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) || topic.ID == 0 {
 		return nil, nil
 	}
 	if err != nil {
@@ -55,8 +55,8 @@ func (*DAO) GetById(id uint) (*Topic, error) {
 
 func (*DAO) GetByUserId(userID uint) ([]Topic, error) {
 	var topics []Topic
-	err := model.DB.Where("user_id = ?", userID).Find(&topics).Error
-	if err == gorm.ErrRecordNotFound {
+	err := model.DB.Where("user_id = ?", userID).First(&topics).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return topics, nil
 	}
 	if err != nil {
@@ -69,7 +69,7 @@ func (*DAO) GetByUserId(userID uint) ([]Topic, error) {
 func (*DAO) DeleteById(userID, id uint) error {
 	var topic Topic
 	err := model.DB.Where("user_id = ? and id = ?", userID, id).Delete(&topic).Error
-	if err == gorm.ErrRecordNotFound {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return errors.New("不存在此帖子，或者没有权限删除")
 	}
 	if err != nil {
@@ -81,8 +81,8 @@ func (*DAO) DeleteById(userID, id uint) error {
 
 func (*DAO) FindIfExist(id uint) bool {
 	var topic Topic
-	err := model.DB.Where("id = ?", id).Find(&topic).Error
-	if err == gorm.ErrRecordNotFound || topic.ID == 0 {
+	err := model.DB.Where("id = ?", id).First(&topic).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false
 	}
 	if err != nil {

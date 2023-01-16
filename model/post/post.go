@@ -53,8 +53,6 @@ func (*DAO) DeleteById(userID, id uint) error {
 	err = model.DB.Where("id = ?", id).Unscoped().Delete(&post).Error
 	if err != nil {
 		return errors.New("不存在此回帖，或者没有权限删除")
-		//utils.Logger.Printf("[Post]delete error: %s\n", err.Error())
-		//return err
 	}
 	return nil
 }
