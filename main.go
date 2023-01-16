@@ -1,6 +1,7 @@
 package main
 
 import (
+	"community-demo/controllers/topic"
 	"community-demo/controllers/user"
 	"community-demo/model"
 	"community-demo/utils"
@@ -16,6 +17,7 @@ func main() {
 	engine.Use(gin.Logger())
 
 	_ = user.InitUserGroup(engine.Group("/user"))
+	_ = topic.InitTopicGroup(engine.Group("/topic"))
 
 	engine.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
