@@ -78,3 +78,16 @@ func (*DAO) DeleteById(userID, id uint) error {
 	}
 	return nil
 }
+
+func (*DAO) FindIfExist(id uint) bool {
+	var topic Topic
+	err := model.DB.Where("id = ?", id).Find(&topic).Error
+	if err == gorm.ErrRecordNotFound || topic.ID == 0 {
+		return false
+	}
+	if err != nil {
+		utils.Logger.Printf("[Topic]find error: %s\n", err.Error())
+		return false
+	}
+	return true
+}

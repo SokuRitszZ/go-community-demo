@@ -92,3 +92,16 @@ func (*DAO) GetBaseData(id uint) (*User, error) {
 	}
 	return &user, nil
 }
+
+func (*DAO) FindIfExist(id uint) bool {
+	var user User
+	err := model.DB.Where("id = ?", id).Find(&user).Error
+	if err == gorm.ErrRecordNotFound || user.ID == 0 {
+		return false
+	}
+	if err != nil {
+		utils.Logger.Printf("[User]find error: %s\n", err.Error())
+		return false
+	}
+	return true
+}
