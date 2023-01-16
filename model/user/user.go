@@ -10,22 +10,22 @@ import (
 
 type User struct {
 	gorm.Model
-	Name     string `gorm:"column:name"`
-	Password string `gorm:"column:password"`
+	Name     string `gorm:"column:name;not null"`
+	Password string `gorm:"column:password;not null" json:"-"`
 	Avatar   string `gorm:"column:avatar"`
 }
 
 type DAO struct{}
 
-var userDAO *DAO
-var userOnce sync.Once
+var dao *DAO
+var once sync.Once
 
-func NewUserDaoInstance() *DAO {
-	userOnce.Do(
+func Dao() *DAO {
+	once.Do(
 		func() {
-			userDAO = &DAO{}
+			dao = &DAO{}
 		})
-	return userDAO
+	return dao
 }
 
 // Register C

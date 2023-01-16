@@ -26,7 +26,7 @@ func (f *getInfoFlow) do() (*user.User, error) {
 
 func (f *getInfoFlow) getBaseData() error {
 	id := f.ID
-	data, err := user.NewUserDaoInstance().GetBaseData(id)
+	data, err := user.Dao().GetBaseData(id)
 	if err != nil {
 		return err
 	}

@@ -36,7 +36,7 @@ func (f *loginFlow) checkMatch() error {
 	password := utils.Encode(f.Password)
 	var nUser *user.User
 	var err error
-	if nUser, err = user.NewUserDaoInstance().CheckMatch(name, password); err != nil {
+	if nUser, err = user.Dao().CheckMatch(name, password); err != nil {
 		return err
 	}
 	if nUser == nil {
