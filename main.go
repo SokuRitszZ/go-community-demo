@@ -1,6 +1,7 @@
 package main
 
 import (
+	"community-demo/controllers/user"
 	"community-demo/model"
 	"community-demo/utils"
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,8 @@ func main() {
 	}
 	engine := gin.Default()
 	engine.Use(gin.Logger())
+
+	_ = user.InitUserGroup(engine.Group("/user"))
 
 	engine.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
